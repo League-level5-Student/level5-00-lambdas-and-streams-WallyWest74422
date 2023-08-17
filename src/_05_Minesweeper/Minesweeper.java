@@ -77,9 +77,14 @@ public class Minesweeper extends PApplet {
 	 */
 	boolean checkWin() {
 		Stream<Cell> streamCells = cells.stream();
-		streamCells.filter((cell) -> cell.revealed == true);
-		streamCells.noneMatch((cell) -> cell.mine == true);
+		long num = streamCells.filter((cell) -> !cell.revealed).count();
+		
+		if(num==10) {
+			return true;
+		}else {
 		return false;
+	
+		}
 	}
 
 	/*
@@ -94,11 +99,14 @@ public class Minesweeper extends PApplet {
 	 * cells with '-' should be revealed - - - -
 	 */
 	void revealCell(Cell cell) {
-        if(cell.mine == false) {
+        if(!cell.mine) {
         	cell.revealed = true;
         	if(cell.minesAround==0) {
         List<Cell> neighbors =	neighbors(cell);
-        neighbors.stream().filter((Cell) -> !cell.revealed).forEach((Cell) -> revealCell(cell));
+        neighbors.stream()
+        .filter((Cell) -> !Cell.revealed)
+        .forEach((Cell) -> revealCell(Cell));
+       
         	}
         	
         }
